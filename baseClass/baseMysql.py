@@ -2,7 +2,7 @@ import pymysql
 
 
 class MysqlConn(object):
-    def __init__(self, host="localhost", user="root", password="root", database="jikong", charset="utf8"):
+    def __init__(self, host="10.0.16.177", user="root", password="root", database="jikong", charset="utf8"):
         self.conn = pymysql.connect(host=host, user=user, password=password, database=database, charset=charset)
         self.cursor = self.conn.cursor()
 

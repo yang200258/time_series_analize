@@ -1,12 +1,32 @@
-from apscheduler.schedulers.background import BackgroundScheduler
+import logging
+
+from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
+from apscheduler.schedulers.background import BlockingScheduler
 
 import data.handFootMouth as handFootMouth
 from model.ArimaModel import ArimaModel
 from utils.util import format_pred, save_data
-scheduler = BackgroundScheduler()
+
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S',
+                    filename='log1.txt',
+                    filemode='a')
+scheduler = BlockingScheduler()
 
 
-@scheduler.scheduled_job('cron', month='1-12', day='1', hour='0', minute='0', second='0')
+def my_listener(event):
+    if event.exception:
+        print('任务出现异常！')
+    else:
+        print('任务照常运行...')
+
+
+scheduler.add_listener(my_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
+scheduler._logger = logging
+
+
+@scheduler.scheduled_job('cron', month='1-12', day='4', hour='15', minute='1-59', second='0')
 def main():
     print('Get the hand_foot_mouth disease forecast data.')
     # plot the trend pic

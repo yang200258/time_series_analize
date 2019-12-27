@@ -50,7 +50,6 @@ class ArimaModel(object):
                     res_data.append({"order": param, "seasonal_order": seasonal_param, "AIC": res.aic})
                 except:
                     continue
-        print(res_data)
         if res_data:
             return min(res_data, key=dic_key)
         else:
@@ -64,7 +63,6 @@ class ArimaModel(object):
 
     @staticmethod
     def plot_corr(fit):
-        print(fit.summary().tables[1])
         fit.plot_diagnostics(figsize=(15, 12))
         plt.show()
 
@@ -118,72 +116,3 @@ class ArimaModel(object):
         # plt.legend()
         # plt.show()
         return pred_ci
-
-# ------------                                ARIMA forecast model             -------------------------
-# y_hat_avg = test.copy()
-# p = d = q = range(0, 2)
-# pdq = list(itertools.product(p, d, q))
-# seasonal_pdq = [(x[0], x[1], x[2], 7) for x in pdq]
-# res_data = []
-# for param in pdq:
-#     for seasonal_param in seasonal_pdq:
-#         try:
-#             mod = statespace.SARIMAX(train['Count'], order=param, seasonal_order=seasonal_param,
-#                                      enforce_stationarity=False, enforce_invertibility=False)
-#             res = mod.fit()
-#             res_data.append({"order": param, "seasonal_order": seasonal_param, "AIC": res.aic})
-#         except:
-#             continue
-
-
-# best_model = min(res_data, key=dic_key)
-# final_model = statespace.SARIMAX(train['Count'], order=best_model['order'], seasonal_order=best_model['seasonal_order'],
-#                                  enforce_stationarity=False, enforce_invertibility=False)
-
-# results = final_model.fit()
-# print(results.summary().tables[1])
-# # plot the validate pic
-# results.plot_diagnostics(figsize=(15, 12))
-# plt.show()
-
-# ---------static validate forecast
-
-# # predict the model value
-# pred = results.get_prediction(start=pd.to_datetime('2013-11-01'), end=pd.to_datetime('2013-12-31'), dynamic=False)
-# pred_ci_static = pred.conf_int()
-# # plot
-# ax = train['Count'].plot(figsize=(15, 8), label="observed", title="static validate forecast")
-# test['Count'].plot(ax=ax, label="test data", color="red")
-# pred.predicted_mean.plot(ax=ax, label="the static predict value by ARIMA model", alpha=.7)
-# ax.fill_between(pred_ci_static.index, pred_ci_static.iloc[:, 0], pred_ci_static.iloc[:, 1], color="k", alpha=.2)
-# plt.legend()
-# plt.show()
-# # compute the MSE
-# y_forecast = pred.predicted_mean
-# mse = ((y_forecast - test['Count']) ** 2).mean()
-
-# -----------dynamic validate forecast
-
-# pred_dynamic = results.get_prediction(start=pd.to_datetime('2013-11-01'), end=pd.to_datetime('2013-12-31'),
-#                                       dynamic=True, full_results=True)
-# pred_dynamic_ci = pred_dynamic.conf_int()
-# # plot
-# ax = train['Count'].plot(figsize=(15, 8), label="observed", title="dynamic validate forecast")
-# # test['Count'].plot(ax=ax, label="test data", color="red")
-# pred_dynamic.predicted_mean.plot(ax=ax, label="the dynamic predict value by ARIMA model")
-# ax.fill_between(pred_dynamic_ci.index, pred_dynamic_ci.iloc[:, 0], pred_dynamic_ci.iloc[:, 1], color="k", alpha=.25)
-# plt.legend()
-# plt.show()
-# # compute the MSE
-# y_forecasted_dynamic = pred_dynamic.predicted_mean
-# mse_dynamic = ((y_forecasted_dynamic - test['Count']) ** 2).mean()
-
-# ----------generate the predict data
-
-# pred_uc = results.get_forecast(steps=365)
-# pred_ci = pred_uc.conf_int()
-# ax = df['Count'].plot(figsize=(20, 15), label="observed", title="final forecast")
-# pred_uc.predicted_mean.plot(ax=ax, label="predict value by ARIMA model")
-# ax.fill_between(pred_ci.index, pred_ci.iloc[:, 0], pred_ci.iloc[:, 1], color="k", alpha=.25)
-# plt.legend()
-# plt.show()

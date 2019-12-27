@@ -1,3 +1,5 @@
+import time
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -32,13 +34,17 @@ def format_pred(pred):
 
 
 def save_data(pred):
-    mc = MysqlConn()
+    mc_test = MysqlConn('59.212.39.6', 'jikong', 'Zh~m,nhG!3', 'jcfx', 'utf8')
+    mc_formal = MysqlConn()
     ls = []
+    now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     for index, row in pred.iterrows():
         d = index.split('-')
-        t = d[0], d[1], index, int(row['upper Count']), int(row['lower'])
+        t = d[0], d[1], index, int(row['upper Count']), int(row['lower']), 1, str(now), str(now)
         ls.append(t)
-    sql = '''insert into ifd_forecast_cal(UUID, CAL_YEAR, CAL_MONTH,CAL_DATE, MAX_FORECAST_COUNT, MIN_FORECAST_COUNT)
-                                values(UUID(), %s, %s, str_to_date(%s,'%%Y-%%m-%%d'), %s, %s) 
-                                on duplicate key update MAX_FORECAST_COUNT=values(MAX_FORECAST_COUNT) and MIN_FORECAST_COUNT=values(MIN_FORECAST_COUNT)'''
-    mc.add(sql, ls)
+    sql = '''REPLACE into ifd_forecast_cal(UUID, CAL_YEAR, CAL_MONTH,CAL_DATE, MAX_FORECAST_COUNT, MIN_FORECAST_COUNT,
+            IS_ACTIVE, CREATE_TIME, DEFAULT_TIME) 
+            values(UUID(), %s, %s, str_to_date(%s,'%%Y-%%m-%%d'), %s, %s, %s, str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s')
+            , str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'))'''
+    mc_test.add(sql, ls)
+    mc_formal.add(sql, ls)

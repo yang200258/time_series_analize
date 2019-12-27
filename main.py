@@ -26,7 +26,7 @@ scheduler.add_listener(my_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 scheduler._logger = logging
 
 
-@scheduler.scheduled_job('cron', month='1-12', day='4', hour='15', minute='1-59', second='0')
+@scheduler.scheduled_job('cron', month='1-12', day='16', hour='10', minute='0-59', second='0')
 def main():
     print('Get the hand_foot_mouth disease forecast data.')
     # plot the trend pic
@@ -53,4 +53,10 @@ def main():
 
 
 if __name__ == '__main__':
-    scheduler.start()
+    with open('log1.txt', 'a', encoding='utf8') as f:
+        try:
+            scheduler.start()
+            f.write('the task run successful!\n')
+        except Exception:
+            scheduler.shutdown()
+            f.write('the task run error!\n')

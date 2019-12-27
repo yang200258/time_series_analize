@@ -31,8 +31,9 @@ res_year_three = res_year_five[-4:]
 res_month_three = res_month_five[-4:]
 res_week_three = res_week_five[-4:]
 
-labels = pd.DataFrame(res_year_five, columns=['Date', 'Count'], index=year_list)
-labels.pop('Date')
+five_data = pd.DataFrame(res_year_five, columns=['Date', 'count_year'], index=year_list)
+# five_data['count_month'] =
+five_data.pop('Date')
 # labels['date'] = pd.to_datetime(labels['Datetime'], format="%Y-%m-%d").dt.normalize()
 
 # aggregate the data to M/3M/Year

@@ -1,0 +1,160 @@
+2020-01-02 09:51:08 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 09:51:08 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 09:51:08 base.py[line:166] INFO Scheduler started
+2020-01-02 09:52:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:52:00 CST)" (scheduled at 2020-01-02 09:52:00+08:00)
+2020-01-02 09:52:02 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:53:00 CST)" executed successfully
+2020-01-02 09:53:23 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 09:53:28 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 09:53:28 base.py[line:166] INFO Scheduler started
+2020-01-02 09:54:42 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 09:54:42 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 09:54:42 base.py[line:166] INFO Scheduler started
+2020-01-02 09:55:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:55:00 CST)" (scheduled at 2020-01-02 09:55:00+08:00)
+2020-01-02 09:55:02 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:56:00 CST)" executed successfully
+2020-01-02 09:56:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:57:00 CST)" (scheduled at 2020-01-02 09:56:00+08:00)
+2020-01-02 09:56:02 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:57:00 CST)" executed successfully
+2020-01-02 09:57:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:58:00 CST)" (scheduled at 2020-01-02 09:57:00+08:00)
+2020-01-02 09:57:01 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:58:00 CST)" executed successfully
+2020-01-02 09:57:36 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 09:57:36 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 09:57:36 base.py[line:166] INFO Scheduler started
+2020-01-02 09:58:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:58:00 CST)" (scheduled at 2020-01-02 09:58:00+08:00)
+2020-01-02 09:58:01 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 09:59:00 CST)" executed successfully
+2020-01-02 09:59:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:00:00 CST)" (scheduled at 2020-01-02 09:59:00+08:00)
+2020-01-02 09:59:01 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:00:00 CST)" executed successfully
+2020-01-02 10:00:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:01:00 CST)" (scheduled at 2020-01-02 10:00:00+08:00)
+2020-01-02 10:00:02 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:01:00 CST)" executed successfully
+2020-01-02 10:06:41 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 10:06:41 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 10:06:41 base.py[line:166] INFO Scheduler started
+2020-01-02 10:07:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:07:00 CST)" (scheduled at 2020-01-02 10:07:00+08:00)
+2020-01-02 10:07:01 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:08:00 CST)" executed successfully
+2020-01-02 10:08:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:09:00 CST)" (scheduled at 2020-01-02 10:08:00+08:00)
+2020-01-02 10:08:01 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:09:00 CST)" executed successfully
+2020-01-02 10:10:10 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 10:10:10 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 10:10:10 base.py[line:166] INFO Scheduler started
+2020-01-02 10:11:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:11:00 CST)" (scheduled at 2020-01-02 10:11:00+08:00)
+2020-01-02 10:11:02 base.py[line:131] ERROR Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:12:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "E:\virtual_environment\time_series\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "E:/time_series_analize/main.py", line 50, in hand_foot_mouth
+    save_data(pred_results)
+  File "E:\time_series_analize\utils\util.py", line 53, in save_data
+    mc_test.add(sql, ls)
+  File "E:\time_series_analize\baseClass\baseMysql.py", line 17, in add
+    effect_rows = self.cursor.executemany(sql, T)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 199, in executemany
+    self.rowcount = sum(self.execute(query, arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 199, in <genexpr>
+    self.rowcount = sum(self.execute(query, arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 168, in execute
+    query = self.mogrify(query, args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 147, in mogrify
+    query = query % self._escape_args(args, conn)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 122, in _escape_args
+    return tuple(conn.literal(arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 122, in <genexpr>
+    return tuple(conn.literal(arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\connections.py", line 467, in literal
+    return self.escape(obj, self.encoders)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\connections.py", line 460, in escape
+    return converters.escape_item(obj, self.charset, mapping=mapping)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 27, in escape_item
+    val = encoder(val, mapping)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 118, in escape_unicode
+    return u"'%s'" % _escape_unicode(value)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 73, in _escape_unicode
+    return value.translate(_escape_table)
+AttributeError: 'numpy.float64' object has no attribute 'translate'
+2020-01-02 10:13:07 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 10:13:07 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 10:13:07 base.py[line:166] INFO Scheduler started
+2020-01-02 10:14:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:14:00 CST)" (scheduled at 2020-01-02 10:14:00+08:00)
+2020-01-02 10:14:01 base.py[line:131] ERROR Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:15:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "E:\virtual_environment\time_series\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "E:/time_series_analize/main.py", line 50, in hand_foot_mouth
+  File "E:\time_series_analize\utils\util.py", line 53, in save_data
+    mc_test.add(sql, ls)
+  File "E:\time_series_analize\baseClass\baseMysql.py", line 17, in add
+    effect_rows = self.cursor.executemany(sql, T)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 199, in executemany
+    self.rowcount = sum(self.execute(query, arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 199, in <genexpr>
+    self.rowcount = sum(self.execute(query, arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 168, in execute
+    query = self.mogrify(query, args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 147, in mogrify
+    query = query % self._escape_args(args, conn)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 122, in _escape_args
+    return tuple(conn.literal(arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 122, in <genexpr>
+    return tuple(conn.literal(arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\connections.py", line 467, in literal
+    return self.escape(obj, self.encoders)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\connections.py", line 460, in escape
+    return converters.escape_item(obj, self.charset, mapping=mapping)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 27, in escape_item
+    val = encoder(val, mapping)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 118, in escape_unicode
+    return u"'%s'" % _escape_unicode(value)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 73, in _escape_unicode
+    return value.translate(_escape_table)
+AttributeError: 'numpy.float64' object has no attribute 'translate'
+2020-01-02 10:14:33 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 10:14:33 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 10:14:33 base.py[line:166] INFO Scheduler started
+2020-01-02 10:15:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:15:00 CST)" (scheduled at 2020-01-02 10:15:00+08:00)
+2020-01-02 10:15:01 base.py[line:131] ERROR Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:16:00 CST)" raised an exception
+Traceback (most recent call last):
+  File "E:\virtual_environment\time_series\lib\site-packages\apscheduler\executors\base.py", line 125, in run_job
+    retval = job.func(*job.args, **job.kwargs)
+  File "E:/time_series_analize/main.py", line 49, in hand_foot_mouth
+    save_data(pred_results)
+  File "E:\time_series_analize\utils\util.py", line 53, in save_data
+    mc_test.add(sql, ls)
+  File "E:\time_series_analize\baseClass\baseMysql.py", line 17, in add
+    effect_rows = self.cursor.executemany(sql, T)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 199, in executemany
+    self.rowcount = sum(self.execute(query, arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 199, in <genexpr>
+    self.rowcount = sum(self.execute(query, arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 168, in execute
+    query = self.mogrify(query, args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 147, in mogrify
+    query = query % self._escape_args(args, conn)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 122, in _escape_args
+    return tuple(conn.literal(arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\cursors.py", line 122, in <genexpr>
+    return tuple(conn.literal(arg) for arg in args)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\connections.py", line 467, in literal
+    return self.escape(obj, self.encoders)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\connections.py", line 460, in escape
+    return converters.escape_item(obj, self.charset, mapping=mapping)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 27, in escape_item
+    val = encoder(val, mapping)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 118, in escape_unicode
+    return u"'%s'" % _escape_unicode(value)
+  File "E:\virtual_environment\time_series\lib\site-packages\pymysql\converters.py", line 73, in _escape_unicode
+    return value.translate(_escape_table)
+AttributeError: 'numpy.float64' object has no attribute 'translate'
+2020-01-02 10:16:02 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 10:16:02 base.py[line:881] INFO Added job "hand_foot_mouth" to job store "default"
+2020-01-02 10:16:02 base.py[line:166] INFO Scheduler started
+2020-01-02 10:17:00 base.py[line:123] INFO Running job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:17:00 CST)" (scheduled at 2020-01-02 10:17:00+08:00)
+2020-01-02 10:17:02 base.py[line:144] INFO Job "hand_foot_mouth (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 10:18:00 CST)" executed successfully
+2020-01-02 11:01:08 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 11:01:08 base.py[line:881] INFO Added job "warning_disease" to job store "default"
+2020-01-02 11:01:08 base.py[line:166] INFO Scheduler started
+2020-01-02 11:02:00 base.py[line:123] INFO Running job "warning_disease (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 11:02:00 CST)" (scheduled at 2020-01-02 11:02:00+08:00)
+2020-01-02 11:02:00 base.py[line:144] INFO Job "warning_disease (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 11:03:00 CST)" executed successfully
+2020-01-02 11:02:26 base.py[line:440] INFO Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2020-01-02 11:02:26 base.py[line:881] INFO Added job "warning_disease" to job store "default"
+2020-01-02 11:02:26 base.py[line:166] INFO Scheduler started
+2020-01-02 11:03:00 base.py[line:123] INFO Running job "warning_disease (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 11:03:00 CST)" (scheduled at 2020-01-02 11:03:00+08:00)
+2020-01-02 11:03:00 base.py[line:144] INFO Job "warning_disease (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 11:04:00 CST)" executed successfully
+2020-01-02 11:04:00 base.py[line:123] INFO Running job "warning_disease (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 11:05:00 CST)" (scheduled at 2020-01-02 11:04:00+08:00)
+2020-01-02 11:04:00 base.py[line:144] INFO Job "warning_disease (trigger: cron[month='1-12', day='1-31', hour='0-23', minute='0-59', second='0'], next run at: 2020-01-02 11:05:00 CST)" executed successfully

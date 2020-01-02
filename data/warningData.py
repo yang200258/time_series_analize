@@ -1,42 +1,71 @@
 import pandas as pd
-
 from baseClass.baseMysql import MysqlConn
+from model.warningModel import WarningModel
 from utils.timedata import cal_year, cal_month, start_week_date, end_week_date, year_list
+from utils.util import add_empty_data
 
 mc = MysqlConn()
-sql_year = '''SELECT min(t.ONSET_YEAR),sum(t.ONSET_NUMBER) as n
+sql_year = '''SELECT min(t.ONSET_YEAR),sum(cast(t.ONSET_NUMBER as signed)) as n
         from `ifd_onset_death_cal` t
         where t.IFD_CODE = 4000 and t.ONSET_YEAR >= %s
         GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE)''' % cal_year
-sql_month = '''SELECT min(t.ONSET_YEAR),sum(t.ONSET_NUMBER) as n
+sql_month = '''SELECT min(t.ONSET_YEAR),sum(cast(t.ONSET_NUMBER as signed)) as n
         from `ifd_onset_death_cal` t
         where t.IFD_CODE = 4000 and month(t.ONSET_DATE) = %s and t.ONSET_YEAR >= %s
         GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE)''' % (cal_month, cal_year)
-sql_week = '''SELECT min(t.ONSET_YEAR),sum(t.ONSET_NUMBER) as n from `ifd_onset_death_cal` t
+sql_week = '''SELECT min(t.ONSET_YEAR),sum(cast(t.ONSET_NUMBER as signed)) as n from `ifd_onset_death_cal` t
         where t.IFD_CODE = 4000 and ((t.ONSET_DATE between '%s' and  '%s') or (t.ONSET_DATE between '%s' and  '%s') or 
         (t.ONSET_DATE between '%s' and  '%s') or (t.ONSET_DATE between '%s' and  '%s') or (t.ONSET_DATE between '%s' and
-          '%s') or (t.ONSET_DATE between '%s' and '%s'))
-        GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE)''' % (start_week_date[0], end_week_date[0],
-                                                                      start_week_date[1], end_week_date[1],
+          '%s'))
+        GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE)''' % (start_week_date[1], end_week_date[1],
                                                                       start_week_date[2], end_week_date[2],
                                                                       start_week_date[3], end_week_date[3],
                                                                       start_week_date[4], end_week_date[4],
                                                                       start_week_date[5], end_week_date[5])
 
-res_year_five = mc.select(sql_year)
-res_month_five = mc.select(sql_month)
-res_week_five = mc.select(sql_week)
+res_year_five = add_empty_data(mc.select(sql_year))
+res_month_five = add_empty_data(mc.select(sql_month))
+res_week_five = add_empty_data(mc.select(sql_week))
 
-res_year_three = res_year_five[-4:]
-res_month_three = res_month_five[-4:]
-res_week_three = res_week_five[-4:]
+five_year_data = pd.DataFrame(res_year_five, columns=['Date', 'count_year'], index=year_list)
+five_month_data = pd.DataFrame(res_month_five, columns=['Date', 'count_month'], index=year_list)
+five_week_data = pd.DataFrame(res_week_five, columns=['Date', 'count_week'], index=year_list)
 
-five_data = pd.DataFrame(res_year_five, columns=['Date', 'count_year'], index=year_list)
-# five_data['count_month'] =
+# 合并5年的数据（方法1）
+# five_data = pd.DataFrame(index=year_list)
+# five_data['count_year'] = five_year_data['count_year']
+# five_data['count_month'] = five_month_data['count_month']
+# five_data['count_week'] = five_week_data['count_week']
+
+# 合并5年的数据（方法2）
+five_data = pd.concat([five_year_data, five_month_data, five_week_data], axis=1)
 five_data.pop('Date')
-# labels['date'] = pd.to_datetime(labels['Datetime'], format="%Y-%m-%d").dt.normalize()
+# five_data = data.iloc[:-1]
+# now_data = data.iloc[-1:]
+three_data = five_data.iloc[-4:-1]
+# 计算标准差\t分布下置信区间
+# std_five, interval_five = deal_cal_std_interval(five_data)
+# std_three, interval_three = deal_cal_std_interval(three_data)
+# 拷贝数据
+# five_data = five_data.copy()
+# three_data = three_data.copy()
+# 均值
+# five_data.loc['mean'] = five_data.mean()
+# three_data.loc['mean'] = three_data.mean()
+# # 标准差
+# five_data.loc['std'] = std_five
+# three_data.loc['std'] = std_three
+# # 偏度系数
+# five_data.loc['skew'] = five_data.skew()
+# three_data.loc['skew'] = three_data.skew()
+# # 变异系数
+# five_data.loc['v'] = five_data.loc['std'] / five_data.loc['mean']
+# three_data.loc['v'] = three_data.loc['std'] / three_data.loc['mean']
+# # 置信区间
+# five_data.loc['interval_up'] = [x[1] for x in interval_five]
+# three_data.loc['interval_up'] = [x[1] for x in interval_three]
 
-# aggregate the data to M/3M/Year
-# hfm_m = aggregating(labels, 'MS')
-# hfm_test = hfm_m.iloc[-6:]
-# hfm_train = hfm_m.iloc[0:-6]
+
+
+
+

@@ -57,6 +57,7 @@ def hand_foot_mouth():
 @scheduler.scheduled_job('cron', month='1-12', day='1-31', hour='0', minute='1', second='0')
 def warning_disease():
     t = WarningModel(five_data)
+    t.data_frame
     t2 = WarningModel(three_data)
 
 

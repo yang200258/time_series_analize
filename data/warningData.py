@@ -4,32 +4,36 @@ from model.warningModel import WarningModel
 from utils.timedata import cal_year, cal_month, start_week_date, end_week_date, year_list
 from utils.util import add_empty_data
 
-mc = MysqlConn()
-sql_year = '''SELECT min(t.ONSET_YEAR),sum(cast(t.ONSET_NUMBER as signed)) as n
-        from `ifd_onset_death_cal` t
-        where t.IFD_CODE = 4000 and t.ONSET_YEAR >= %s
-        GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE)''' % cal_year
-sql_month = '''SELECT min(t.ONSET_YEAR),sum(cast(t.ONSET_NUMBER as signed)) as n
-        from `ifd_onset_death_cal` t
-        where t.IFD_CODE = 4000 and month(t.ONSET_DATE) = %s and t.ONSET_YEAR >= %s
-        GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE)''' % (cal_month, cal_year)
-sql_week = '''SELECT min(t.ONSET_YEAR),sum(cast(t.ONSET_NUMBER as signed)) as n from `ifd_onset_death_cal` t
-        where t.IFD_CODE = 4000 and ((t.ONSET_DATE between '%s' and  '%s') or (t.ONSET_DATE between '%s' and  '%s') or 
-        (t.ONSET_DATE between '%s' and  '%s') or (t.ONSET_DATE between '%s' and  '%s') or (t.ONSET_DATE between '%s' and
-          '%s'))
-        GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE)''' % (start_week_date[1], end_week_date[1],
-                                                                      start_week_date[2], end_week_date[2],
-                                                                      start_week_date[3], end_week_date[3],
-                                                                      start_week_date[4], end_week_date[4],
-                                                                      start_week_date[5], end_week_date[5])
+mc = MysqlConn('59.212.39.6', 'jikong', 'Zh~m,nhG!3', 'yjcl', 'utf8')
+sql_year = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(ID_CARD) from `t_card_infection`
+        where DISEASE_NAME in ('痢疾','登革热','丙肝','戊肝','乙肝','百日咳','淋病','梅毒','流行性感冒', 
+        '流行性腮腺炎','风疹','急性出血性结膜炎','手足口病','其它感染性腹泻病') 
+        AND YEAR(ACCIDENT_DATE) >= %s AND DISEASE_NAME IS NOT NULL
+        GROUP BY DISEASE_NAME,YEAR(ACCIDENT_DATE) ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % cal_year
+sql_month = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(ID_CARD) from `t_card_infection`
+        where DISEASE_NAME in ('痢疾','登革热','丙肝','戊肝','乙肝','百日咳','淋病','梅毒','流行性感冒', 
+        '流行性腮腺炎','风疹','急性出血性结膜炎','手足口病','其它感染性腹泻病') 
+        AND YEAR(ACCIDENT_DATE) >= %s AND DISEASE_NAME IS NOT NULL AND MONTH(ACCIDENT_DATE)=%s
+        GROUP BY DISEASE_NAME,YEAR(ACCIDENT_DATE) ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % (cal_year, cal_month)
+sql_week = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(ID_CARD) from `t_card_infection`
+        where DISEASE_NAME in ('痢疾','登革热','丙肝','戊肝','乙肝','百日咳','淋病','梅毒','流行性感冒', 
+        '流行性腮腺炎','风疹','急性出血性结膜炎','手足口病','其它感染性腹泻病') AND DISEASE_NAME IS NOT NULL
+         and ((ACCIDENT_DATE between '%s' and  '%s') or (ACCIDENT_DATE between '%s' and  '%s') or 
+        (ACCIDENT_DATE between '%s' and  '%s') or (ACCIDENT_DATE between '%s' and  '%s') or 
+        (ACCIDENT_DATE between '%s' and '%s')) 
+        GROUP BY YEAR(t.ONSET_DATE) ORDER BY YEAR(t.ONSET_DATE),DISEASE_NAME''' % (start_week_date[1], end_week_date[1],
+                                                                                   start_week_date[2], end_week_date[2],
+                                                                                   start_week_date[3], end_week_date[3],
+                                                                                   start_week_date[4], end_week_date[4],
+                                                                                   start_week_date[5], end_week_date[5])
 
-res_year_five = add_empty_data(mc.select(sql_year))
-res_month_five = add_empty_data(mc.select(sql_month))
-res_week_five = add_empty_data(mc.select(sql_week))
+res_year_five = mc.select(sql_year)
+# res_month_five = add_empty_data(mc.select(sql_month))
+# res_week_five = add_empty_data(mc.select(sql_week))
 
-five_year_data = pd.DataFrame(res_year_five, columns=['Date', 'count_year'], index=year_list)
-five_month_data = pd.DataFrame(res_month_five, columns=['Date', 'count_month'], index=year_list)
-five_week_data = pd.DataFrame(res_week_five, columns=['Date', 'count_week'], index=year_list)
+five_year_data = pd.DataFrame(index=year_list, columns=[('count_year', 'hand'), ('count_year', 'foot')])
+# five_month_data = pd.DataFrame(res_month_five, columns=['Date', 'count_month'], index=year_list)
+# five_week_data = pd.DataFrame(res_week_five, columns=['Date', 'count_week'], index=year_list)
 
 # 合并5年的数据（方法1）
 # five_data = pd.DataFrame(index=year_list)
@@ -64,8 +68,3 @@ three_data = five_data.iloc[-4:-1]
 # # 置信区间
 # five_data.loc['interval_up'] = [x[1] for x in interval_five]
 # three_data.loc['interval_up'] = [x[1] for x in interval_three]
-
-
-
-
-

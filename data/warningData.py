@@ -4,18 +4,18 @@ from model.warningModel import WarningModel
 from utils.timedata import cal_year, cal_month, start_week_date, end_week_date, year_list
 from utils.util import add_empty_data
 
-mc = MysqlConn('59.212.39.6', 'jikong', 'Zh~m,nhG!3', 'yjcl', 'utf8')
-sql_year = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(ID_CARD) from `t_card_infection`
+mc = MysqlConn('mysql-ali')
+sql_year = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(id) from `t_card_infection`
         where DISEASE_NAME in ('痢疾','登革热','丙肝','戊肝','乙肝','百日咳','淋病','梅毒','流行性感冒', 
         '流行性腮腺炎','风疹','急性出血性结膜炎','手足口病','其它感染性腹泻病') 
         AND YEAR(ACCIDENT_DATE) >= %s AND DISEASE_NAME IS NOT NULL
-        GROUP BY DISEASE_NAME,YEAR(ACCIDENT_DATE) ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % cal_year
-sql_month = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(ID_CARD) from `t_card_infection`
+        GROUP BY DISEASE_NAME,YEAR(ACCIDENT_DATE) ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME'''
+sql_month = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(id) from `t_card_infection`
         where DISEASE_NAME in ('痢疾','登革热','丙肝','戊肝','乙肝','百日咳','淋病','梅毒','流行性感冒', 
         '流行性腮腺炎','风疹','急性出血性结膜炎','手足口病','其它感染性腹泻病') 
         AND YEAR(ACCIDENT_DATE) >= %s AND DISEASE_NAME IS NOT NULL AND MONTH(ACCIDENT_DATE)=%s
         GROUP BY DISEASE_NAME,YEAR(ACCIDENT_DATE) ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % (cal_year, cal_month)
-sql_week = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(ID_CARD) from `t_card_infection`
+sql_week = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(id) from `t_card_infection`
         where DISEASE_NAME in ('痢疾','登革热','丙肝','戊肝','乙肝','百日咳','淋病','梅毒','流行性感冒', 
         '流行性腮腺炎','风疹','急性出血性结膜炎','手足口病','其它感染性腹泻病') AND DISEASE_NAME IS NOT NULL
          and ((ACCIDENT_DATE between '%s' and  '%s') or (ACCIDENT_DATE between '%s' and  '%s') or 
@@ -27,7 +27,7 @@ sql_week = '''SELECT YEAR(ACCIDENT_DATE),DISEASE_NAME,count(ID_CARD) from `t_car
                                                                                    start_week_date[4], end_week_date[4],
                                                                                    start_week_date[5], end_week_date[5])
 
-res_year_five = mc.select(sql_year)
+res_year_five = mc.getAll(sql_year, cal_year)
 # res_month_five = add_empty_data(mc.select(sql_month))
 # res_week_five = add_empty_data(mc.select(sql_week))
 

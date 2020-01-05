@@ -2,7 +2,7 @@ from baseClass.baseMysql import MysqlConn
 import pandas as pd
 from utils.util import aggregating
 
-mc = MysqlConn()
+mc = MysqlConn('mysql-formal-forecast')
 sql = '''SELECT min(t.ONSET_DATE), sum(t.ONSET_NUMBER) as n
         from `ifd_onset_death_cal` t
         where t.IFD_CODE = 4000 and t.ONSET_YEAR > 2013

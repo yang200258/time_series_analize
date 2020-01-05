@@ -38,8 +38,8 @@ def format_pred(pred):
 
 
 def save_data(pred):
-    mc_test = MysqlConn('59.212.39.6', 'jikong', 'Zh~m,nhG!3', 'jcfx', 'utf8')
-    mc_formal = MysqlConn()
+    mc_test = MysqlConn('mysql-test-jcfx')
+    mc_formal = MysqlConn('mysql-formal-forecast')
     ls = []
     now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     for index, row in pred.iterrows():

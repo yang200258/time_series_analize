@@ -1,7 +1,3 @@
-import traceback
-from queue import Queue
-
-import DBUtils as DBUtils
 import pymysql
 from DBUtils.PooledDB import PooledDB
 from pymysql.cursors import DictCursor
@@ -44,7 +40,6 @@ class MysqlConn(BasePymysqlPool):
         """
         if MysqlConn.__pool is None:
             maxconnections = 15
-            print(self.host, self.user, self.port, self.password, self.db_name)
             __pool = PooledDB(creator=pymysql,
                               maxconnections=maxconnections,
                               host=self.host,
@@ -52,9 +47,8 @@ class MysqlConn(BasePymysqlPool):
                               port=self.port,
                               password=self.password,
                               db=self.db_name,
-                              use_unicode=False,
-                              charset='utf8',
-                              cursorclass=DictCursor)
+                              use_unicode=True,
+                              charset='utf8')
         return __pool.connection()
 
     def getAll(self, sql, param=None):
@@ -187,9 +181,6 @@ class MysqlConn(BasePymysqlPool):
             self.end('commit')
         else:
             self.end('rollback')
-        print("dispose释放连接池资源")
-        # self._cursor.close()
-        # self._conn.close()
 
     def __del__(self):
         print("__del__释放连接池资源")

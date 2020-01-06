@@ -4,11 +4,7 @@ import time
 from queue import Queue
 
 import numpy as np
-import pandas as pd
 from baseClass.baseMysql import MysqlConn
-from model.warningModel import WarningModel
-from utils.timedata import cal_year, cal_month, start_week_date, end_week_date, year_list
-from utils.util import add_empty_data
 
 ds = ['痢疾', '登革热', '丙肝', '戊肝', '乙肝', '百日咳', '淋病', '梅毒', '流行性感冒',
       '流行性腮腺炎', '风疹', '急性出血性结膜炎', '手足口病', '其它感染性腹泻病']

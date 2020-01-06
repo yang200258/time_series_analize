@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 
 
-class WarningModel(object):
+class  WarningModel(object):
     def __init__(self, data_frame):
         self.data_frame = data_frame
         l = len(self.data_frame) - 1

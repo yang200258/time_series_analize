@@ -55,14 +55,17 @@ def save_data(pred):
     mc_formal.add(sql, ls)
 
 
-def add_empty_data(res_data):
-    q_ls = []
-    p_ls = []
-    for p, q in res_data:
-        p_ls.append(p)
-        q_ls.append((p, int(q)))
-    for x in year_list:
-        if x not in p_ls:
-            q_ls.append((x, 0))
-    return q_ls
+ds = ['痢疾', '登革热', '丙肝', '戊肝', '乙肝', '百日咳', '淋病', '梅毒', '流行性感冒',
+      '流行性腮腺炎', '风疹', '急性出血性结膜炎', '手足口病', '其它感染性腹泻病']
 
+
+# TODO 需要优化从数据库拿出的列表数据，如何更高效转化为dataframe
+def trans_mysql_data(res_data):
+    data = pd.DataFrame(index=year_list, columns=ds)
+    start = time.time()
+    for item in res_data:
+        data.at[item[0], item[1]] = item[2]
+    data.fillna(0, inplace=True)
+    end = time.time() - start
+    print('处理从数据库获取的数据共用时：%s 秒' % end)
+    return data

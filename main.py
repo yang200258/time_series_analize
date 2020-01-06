@@ -6,7 +6,7 @@ from apscheduler.schedulers.background import BlockingScheduler
 import data.handFootMouth as handFootMouth
 from data.warningData import five_data, three_data
 from model.ArimaModel import ArimaModel
-from model.warningModel import WarningModel
+from model.WarningModel import WarningModel
 from utils.util import format_pred, save_data
 
 logging.basicConfig(level=logging.INFO,
@@ -54,10 +54,9 @@ def hand_foot_mouth():
     # x = holt.predict(3)
 
 
-@scheduler.scheduled_job('cron', month='1-12', day='1-31', hour='0', minute='1', second='0')
+@scheduler.scheduled_job('cron', month='1-12', day='1-31', hour='17', minute='1-59', second='0')
 def warning_disease():
     t = WarningModel(five_data)
-    t.data_frame
     t2 = WarningModel(three_data)
 
 

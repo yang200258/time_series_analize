@@ -1,14 +1,16 @@
 import logging
+from importlib import reload
 
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from apscheduler.schedulers.background import BlockingScheduler
 
-import data.handFootMouth as handFootMouth
-from data.warningData import five_data, three_data
-from model.ArimaModel import ArimaModel
+from data import warningData
+from data.warningData import five_data, three_data, dise_ls
 from model.WarningModel import WarningModel
-from utils.util import format_pred, save_data
 
+from utils.util import format_pred, save_pred_data, save_warn_data
+from model.ArimaModel import ArimaModel
+import data.handFootMouth as handFootMouth
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S',
@@ -30,6 +32,7 @@ scheduler._logger = logging
 
 @scheduler.scheduled_job('cron', month='1-12', day='1', hour='0', minute='1', second='0')
 def hand_foot_mouth():
+    reload(handFootMouth)
     print('Get the hand_foot_mouth disease forecast data.')
     # plot the trend pic
     # util.plot_trend(handFootMouth.hfm_train, handFootMouth.hfm_test)
@@ -46,7 +49,7 @@ def hand_foot_mouth():
     pred_results = format_pred(pred_ci)
 
     # save the forecast data to database
-    save_data(pred_results)
+    save_pred_data(pred_results)
 
     # create the model by HoltWinter
     # holt = HoltWintersModel(handFootMouth.hfm_train, handFootMouth.hfm_test, 2)
@@ -54,17 +57,20 @@ def hand_foot_mouth():
     # x = holt.predict(3)
 
 
-@scheduler.scheduled_job('cron', month='1-12', day='1-31', hour='17', minute='1-59', second='0')
+@scheduler.scheduled_job('cron', hour='00', minute='2', second='0')
 def warning_disease():
-    t = WarningModel(five_data)
-    t2 = WarningModel(three_data)
+    reload(warningData)
+    t = WarningModel(five_data).cal_frame
+    t2 = WarningModel(three_data).cal_frame
+    save_warn_data(t, 2, dise_ls)
+    save_warn_data(t2, 1, dise_ls)
 
 
 if __name__ == '__main__':
     with open('log.txt', 'a', encoding='utf8') as f:
         try:
             scheduler.start()
-            f.write('the task run successful!\n')
+            f.write('任务运行成功!\n')
         except Exception:
             scheduler.shutdown()
-            f.write('***********************the task run error!*****************************\n')
+            f.write('***********************任务运行失败!*****************************\n')

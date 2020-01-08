@@ -1,3 +1,5 @@
+import time
+
 import pymysql
 from DBUtils.PooledDB import PooledDB
 from pymysql.cursors import DictCursor
@@ -48,7 +50,9 @@ class MysqlConn(BasePymysqlPool):
                               password=self.password,
                               db=self.db_name,
                               use_unicode=True,
-                              charset='utf8')
+                              charset='utf8',
+                              # cursorclass=DictCursor
+                              )
         return __pool.connection()
 
     def getAll(self, sql, param=None):
@@ -58,6 +62,8 @@ class MysqlConn(BasePymysqlPool):
         @param param: 可选参数，条件列表值（元组/列表）
         @return: result list(字典对象)/boolean 查询到的结果集
         """
+        print('开始获取数据')
+        start = time.time()
         if param is None:
             count = self._cursor.execute(sql)
         else:
@@ -66,6 +72,8 @@ class MysqlConn(BasePymysqlPool):
             result = self._cursor.fetchall()
         else:
             result = False
+        end = time.time()
+        print('获取数据共用时： %s' % (end - start))
         return result
 
     def getOne(self, sql, param=None):
@@ -181,8 +189,11 @@ class MysqlConn(BasePymysqlPool):
             self.end('commit')
         else:
             self.end('rollback')
+        print("释放连接池资源 %s,%s" % (self.host, self.db_name))
+        self._cursor.close()
+        self._conn.close()
 
     def __del__(self):
-        print("__del__释放连接池资源")
+        print("释放连接池资源 %s,%s" % (self.host, self.db_name))
         self._cursor.close()
         self._conn.close()

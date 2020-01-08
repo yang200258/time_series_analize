@@ -3,14 +3,13 @@ import time
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy import stats
 
 from baseClass.baseMysql import MysqlConn
 
+from utils.timedata import year_list, cal_week, now_year, cal_month
+
+
 # aggregating dataFrame by the resample
-from utils.timedata import year_list
-
-
 def aggregating(data_frame, style):
     data_frame['Datetime'] = pd.to_datetime(data_frame['Datetime'], format="%Y-%m-%d")
     data_frame['Count'] = pd.to_numeric(data_frame['Count'])
@@ -37,8 +36,8 @@ def format_pred(pred):
     return pred
 
 
-def save_data(pred):
-    mc_test = MysqlConn('mysql-test-jcfx')
+def save_pred_data(pred):
+    mc_test = MysqlConn('mysql-test-forecast')
     mc_formal = MysqlConn('mysql-formal-forecast')
     ls = []
     now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
@@ -51,16 +50,38 @@ def save_data(pred):
             IS_ACTIVE, CREATE_TIME, DEFAULT_TIME) 
             values(UUID(), %s, %s, str_to_date(%s,'%%Y-%%m-%%d'), %s, %s, %s, str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s')
             , str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'))'''
-    mc_test.add(sql, ls)
-    mc_formal.add(sql, ls)
+    mc_test.insertMany(sql, ls)
+    mc_formal.insertMany(sql, ls)
+    mc_test.dispose()
+    mc_formal.dispose()
 
 
-ds = ['痢疾', '登革热', '丙肝', '戊肝', '乙肝', '百日咳', '淋病', '梅毒', '流行性感冒',
-      '流行性腮腺炎', '风疹', '急性出血性结膜炎', '手足口病', '其它感染性腹泻病']
+def save_warn_data(data, type_cal, dise_ls):
+    mc_test = MysqlConn('mysql-test-warning')
+    # mc_formal = MysqlConn('mysql-formal-warning')
+    sql = '''REPLACE into 
+        t_infect_t_distribution_warning(UUID, title_cal, TYPE_YEAR_CODE, TYPE_TIME_CODE, DISEASE_NAME, DISEASE_CODE,COUNT_CAL,
+         MEAN_CAL, SKEW_CAL, STD_CAL, INTERVAL_UP_CAL, CV_CAL, IS_ACTIVE, warning_state, WARNING_TIME, UPDATE_TIME,  CREATE_TIME) 
+        values(UUID(), %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'), str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s')
+                , str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'))'''
+    ls = []
+    now = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+    type_time = {"year": 1, "month": 2, "week": 3}
+    type_title = {1: "%s年" % now_year, 2: "%s年%s月" % (now_year, cal_month), 3: "%s年第%s周" % (now_year, cal_week)}
+    for index, row in data:
+        item = list(data[index][row][-6:])
+        warning_state = 0 if (int(item[0]) < int(item[4])) or (int(item[0]) == int(item[4]) == 0) else 1
+        warning_time = None if (int(item[0]) < int(item[4])) or (int(item[0]) == int(item[4]) == 0) else now
+        title_cal = type_title[type_time[index]]
+        t = title_cal, type_cal, type_time[index], row, dise_ls[row], int(item[0]), round(item[1], 2), round(item[2], 2)\
+            , round(item[3], 2), int(item[4]), round(item[5], 2), '1', warning_state, warning_time, now, now
+        ls.append(t)
+    mc_test.insertMany(sql, ls)
+    mc_test.dispose()
 
 
 # TODO 需要优化从数据库拿出的列表数据，如何更高效转化为dataframe
-def trans_mysql_data(res_data):
+def trans_mysql_data(res_data, ds):
     data = pd.DataFrame(index=year_list, columns=ds)
     start = time.time()
     for item in res_data:

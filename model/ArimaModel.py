@@ -2,13 +2,16 @@ import warnings
 import matplotlib.pyplot as plt
 import itertools
 from statsmodels.tsa.api import statespace
-from utils.util import dic_key
 import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
 from math import sqrt
 
 plt.style.use('fivethirtyeight')
 warnings.filterwarnings('ignore')
+
+
+def dic_key(dic):
+    return dic['AIC']
 
 
 class ArimaModel(object):

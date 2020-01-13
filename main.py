@@ -4,12 +4,12 @@ from importlib import reload
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from apscheduler.schedulers.background import BlockingScheduler
 
+from baseClass.baseMysql import MysqlConn
 from data import warningData
-from data.warningData import five_data, three_data, dise_ls
-from model.WarningModel import WarningModel
+from data.warningData import five_data_test, five_data_formal, three_data_test, three_data_formal, dis_ls_test, \
+    dis_ls_formal
 
-from utils.util import format_pred, save_pred_data, save_warn_data
-from model.ArimaModel import ArimaModel
+from utils.util import generalPred, generalWarn
 import data.handFootMouth as handFootMouth
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -30,40 +30,31 @@ scheduler.add_listener(my_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 scheduler._logger = logging
 
 
-@scheduler.scheduled_job('cron', month='1-12', day='1', hour='0', minute='1', second='0')
+@scheduler.scheduled_job('cron', month='1-12', day='1', hour='00', minute='2', second='0')
 def hand_foot_mouth():
     reload(handFootMouth)
     print('Get the hand_foot_mouth disease forecast data.')
-    # plot the trend pic
-    # util.plot_trend(handFootMouth.hfm_train, handFootMouth.hfm_test)
+    mc_test = MysqlConn('mysql-test-forecast')
+    mc_formal = MysqlConn('mysql-formal-forecast')
 
-    # create the model by arima
-    arima = ArimaModel(handFootMouth.hfm_train, handFootMouth.hfm_test, (2, 1, 1), (2, 1, 1, 12))
+    generalPred(mc_test, handFootMouth.hfm_train_test, handFootMouth.hfm_test_test)
+    generalPred(mc_formal, handFootMouth.hfm_train_formal, handFootMouth.hfm_test_formal)
 
-    # validate the model
-    # pred_static, pred_static_ci, mse_static = arima.static_validate()
-    # pred_dynamic, pred_ci_dynamic, mse_dynamic = arima.dynamic_validate()
-
-    # generate the forecast data
-    pred_ci = arima.predict(2)
-    pred_results = format_pred(pred_ci)
-
-    # save the forecast data to database
-    save_pred_data(pred_results)
-
-    # create the model by HoltWinter
-    # holt = HoltWintersModel(handFootMouth.hfm_train, handFootMouth.hfm_test, 2)
-    # holt.plot_validate()
-    # x = holt.predict(3)
+    mc_test.dispose()
+    mc_formal.dispose()
 
 
 @scheduler.scheduled_job('cron', hour='00', minute='2', second='0')
 def warning_disease():
     reload(warningData)
-    t = WarningModel(five_data).cal_frame
-    t2 = WarningModel(three_data).cal_frame
-    save_warn_data(t, 2, dise_ls)
-    save_warn_data(t2, 1, dise_ls)
+    mc_test = MysqlConn('mysql-test-warning')
+    mc_formal = MysqlConn('mysql-formal-warning')
+
+    generalWarn(mc_test, five_data_test, three_data_test, dis_ls_test)
+    generalWarn(mc_test, five_data_formal, three_data_formal, dis_ls_formal)
+
+    mc_test.dispose()
+    mc_formal.dispose()
 
 
 if __name__ == '__main__':

@@ -62,8 +62,8 @@ class MysqlConn(BasePymysqlPool):
         @param param: 可选参数，条件列表值（元组/列表）
         @return: result list(字典对象)/boolean 查询到的结果集
         """
-        print('开始获取数据')
-        start = time.time()
+        # print('开始获取数据')
+        # start = time.time()
         if param is None:
             count = self._cursor.execute(sql)
         else:
@@ -72,8 +72,8 @@ class MysqlConn(BasePymysqlPool):
             result = self._cursor.fetchall()
         else:
             result = False
-        end = time.time()
-        print('获取数据共用时： %s' % (end - start))
+        # end = time.time()
+        # print('获取数据共用时： %s' % (end - start))
         return result
 
     def getOne(self, sql, param=None):

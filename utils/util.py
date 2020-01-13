@@ -4,7 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-from baseClass.baseMysql import MysqlConn
+from model.ArimaModel import ArimaModel
+from model.WarningModel import WarningModel
 
 from utils.timedata import year_list, cal_week, now_year, cal_month
 
@@ -15,10 +16,6 @@ def aggregating(data_frame, style):
     data_frame['Count'] = pd.to_numeric(data_frame['Count'])
     data_frame.index = data_frame['Datetime']
     return data_frame.resample(style).sum()
-
-
-def dic_key(dic):
-    return dic['AIC']
 
 
 def plot_trend(train, test):
@@ -36,9 +33,7 @@ def format_pred(pred):
     return pred
 
 
-def save_pred_data(pred):
-    mc_test = MysqlConn('mysql-test-forecast')
-    mc_formal = MysqlConn('mysql-formal-forecast')
+def save_pred_data(mc, pred):
     ls = []
     now = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     for index, row in pred.iterrows():
@@ -50,15 +45,10 @@ def save_pred_data(pred):
             IS_ACTIVE, CREATE_TIME, DEFAULT_TIME) 
             values(UUID(), %s, %s, str_to_date(%s,'%%Y-%%m-%%d'), %s, %s, %s, str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s')
             , str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'))'''
-    mc_test.insertMany(sql, ls)
-    mc_formal.insertMany(sql, ls)
-    mc_test.dispose()
-    mc_formal.dispose()
+    mc.insertMany(sql, ls)
 
 
-def save_warn_data(data, type_cal, dise_ls):
-    mc_test = MysqlConn('mysql-test-warning')
-    # mc_formal = MysqlConn('mysql-formal-warning')
+def save_warn_data(mc, data, type_cal, dise_ls):
     sql = '''REPLACE into 
         t_infect_t_distribution_warning(UUID, title_cal, TYPE_YEAR_CODE, TYPE_TIME_CODE, DISEASE_NAME, DISEASE_CODE,COUNT_CAL,
          MEAN_CAL, SKEW_CAL, STD_CAL, INTERVAL_UP_CAL, CV_CAL, IS_ACTIVE, warning_state, WARNING_TIME, UPDATE_TIME,  CREATE_TIME) 
@@ -76,8 +66,7 @@ def save_warn_data(data, type_cal, dise_ls):
         t = title_cal, type_cal, type_time[index], row, dise_ls[row], int(item[0]), round(item[1], 2), round(item[2], 2)\
             , round(item[3], 2), int(item[4]), round(item[5], 2), '1', warning_state, warning_time, now, now
         ls.append(t)
-    mc_test.insertMany(sql, ls)
-    mc_test.dispose()
+    mc.insertMany(sql, ls)
 
 
 # TODO 需要优化从数据库拿出的列表数据，如何更高效转化为dataframe
@@ -90,3 +79,35 @@ def trans_mysql_data(res_data, ds):
     end = time.time() - start
     print('处理从数据库获取的数据共用时：%s 秒' % end)
     return data
+
+
+def generalPred(mc, hfm_train, hfm_test):
+    # plot the trend pic
+    # util.plot_trend(handFootMouth.hfm_train, handFootMouth.hfm_test)
+
+    # create the model by arima
+    arima_test = ArimaModel(hfm_train, hfm_test, (2, 1, 1), (2, 1, 1, 12))
+
+    # validate the model
+    # pred_static, pred_static_ci, mse_static = arima.static_validate()
+    # pred_dynamic, pred_ci_dynamic, mse_dynamic = arima.dynamic_validate()
+
+    # generate the forecast data
+    pred_ci = arima_test.predict(2)
+    pred_results = format_pred(pred_ci)
+
+    # save the forecast data to database
+    save_pred_data(mc, pred_results)
+
+    # create the model by HoltWinter
+    # holt = HoltWintersModel(handFootMouth.hfm_train, handFootMouth.hfm_test, 2)
+    # holt.plot_validate()
+    # x = holt.predict(3)
+
+
+def generalWarn(mc, five_data, three_data, dis_ls):
+    t = WarningModel(five_data).cal_frame
+    t2 = WarningModel(three_data).cal_frame
+
+    save_warn_data(mc, t, 2, dis_ls)
+    save_warn_data(mc, t2, 1, dis_ls)

@@ -9,6 +9,12 @@ from model.WarningModel import WarningModel
 
 from utils.timedata import year_list, cal_week, now_year, cal_month
 
+area_id = '8cca28b405ac11e4a031d96810bebd04'
+area_code = '460000000000'
+area_name = '海南省'
+level_code = '460000000000'
+full_name = '海南省'
+
 
 # aggregating dataFrame by the resample
 def aggregating(data_frame, style):
@@ -50,9 +56,11 @@ def save_pred_data(mc, pred):
 
 def save_warn_data(mc, data, type_cal, dise_ls):
     sql = '''REPLACE into 
-        t_infect_t_distribution_warning(UUID, title_cal, TYPE_YEAR_CODE, TYPE_TIME_CODE, DISEASE_NAME, DISEASE_CODE,COUNT_CAL,
-         MEAN_CAL, SKEW_CAL, STD_CAL, INTERVAL_UP_CAL, CV_CAL, IS_ACTIVE, warning_state, WARNING_TIME, UPDATE_TIME,  CREATE_TIME) 
-        values(UUID(), %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'), str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s')
+        t_infect_t_distribution_warning(UUID, CAL_AREA_ID, CAL_AREA_CODE, CAL_AREA_LEVEL_CODE, 
+        CAL_AREA_NAME, CAL_AREA_FULL_NAME, title_cal, TYPE_YEAR_CODE, TYPE_TIME_CODE, DISEASE_NAME, DISEASE_CODE,
+        COUNT_CAL, MEAN_CAL, SKEW_CAL, STD_CAL, INTERVAL_UP_CAL, CV_CAL, IS_ACTIVE, warning_state, WARNING_TIME,
+        UPDATE_TIME,  CREATE_TIME) 
+        values(UUID(), %s, %s, %s, %s, %s, %s, %s,%s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'), str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s')
                 , str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'))'''
     ls = []
     now = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
@@ -63,8 +71,9 @@ def save_warn_data(mc, data, type_cal, dise_ls):
         warning_state = 0 if (int(item[0]) < int(item[4])) or (int(item[0]) == int(item[4]) == 0) else 1
         warning_time = None if (int(item[0]) < int(item[4])) or (int(item[0]) == int(item[4]) == 0) else now
         title_cal = type_title[type_time[index]]
-        t = title_cal, type_cal, type_time[index], row, dise_ls[row], int(item[0]), round(item[1], 2), round(item[2], 2)\
-            , round(item[3], 2), int(item[4]), round(item[5], 2), '1', warning_state, warning_time, now, now
+        t = area_id, area_code, level_code, area_name, full_name, title_cal, type_cal, type_time[index], row, \
+            dise_ls[row], int(item[0]), round(item[1], 2), round(item[2], 2), round(item[3], 2), int(item[4]), \
+            round(item[5], 2), '1', warning_state, warning_time, now, now
         ls.append(t)
     mc.insertMany(sql, ls)
 

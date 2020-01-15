@@ -51,7 +51,7 @@ def warning_disease():
     mc_formal = MysqlConn('mysql-formal-warning')
 
     generalWarn(mc_test, five_data_test, three_data_test, dis_ls_test)
-    generalWarn(mc_test, five_data_formal, three_data_formal, dis_ls_formal)
+    generalWarn(mc_formal, five_data_formal, three_data_formal, dis_ls_formal)
 
     mc_test.dispose()
     mc_formal.dispose()

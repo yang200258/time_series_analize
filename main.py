@@ -30,7 +30,7 @@ scheduler.add_listener(my_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 scheduler._logger = logging
 
 
-@scheduler.scheduled_job('cron', month='1-12', day='1', hour='00', minute='2', second='0')
+@scheduler.scheduled_job('cron', month='1-12', day='01', hour='00', minute='00', second='0')
 def hand_foot_mouth():
     reload(handFootMouth)
     print('Get the hand_foot_mouth disease forecast data.')
@@ -44,7 +44,7 @@ def hand_foot_mouth():
     mc_formal.dispose()
 
 
-@scheduler.scheduled_job('cron', hour='00', minute='2', second='0')
+@scheduler.scheduled_job('cron', month='1-12', day='1-31', hour='00', minute='02', second='0')
 def warning_disease():
     reload(warningData)
     mc_test = MysqlConn('mysql-test-warning')

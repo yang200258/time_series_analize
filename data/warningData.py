@@ -4,7 +4,7 @@ from utils.timedata import cal_year, cal_month, start_week_date, end_week_date
 from utils.util import trans_mysql_data
 
 
-def getWarningData(mc, dis_list):
+def getWarningData(mc, dis_list, year_num, month_num,  start_week, end_week):
     sql_dise = '''SELECT DISEASES_NAME,DISEASE_CODE from dim_infect_disease'''
     # 获取所有疾病对应code及names
     dise_ls = dict(mc.getAll(sql_dise))
@@ -12,29 +12,29 @@ def getWarningData(mc, dis_list):
     sql_year = '''SELECT YEAR(ACCIDENT_DATE) as year,DISEASE_NAME as name, count(ID_CARD) as count 
             from `t_card_infection`
             where DISEASE_NAME in %s AND YEAR(ACCIDENT_DATE) >= %s AND DISEASE_NAME IS NOT NULL
-            GROUP BY DISEASE_NAME,YEAR(ACCIDENT_DATE) ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % (ds, cal_year)
+            GROUP BY DISEASE_NAME,YEAR(ACCIDENT_DATE) ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % (ds, year_num)
     sql_month = '''SELECT YEAR(ACCIDENT_DATE) as year,DISEASE_NAME as name,count(ID_CARD) as count  from `t_card_infection`
             where DISEASE_NAME in %s AND YEAR(ACCIDENT_DATE) >= %s AND DISEASE_NAME IS NOT NULL AND MONTH(ACCIDENT_DATE)=%s
             GROUP BY YEAR(ACCIDENT_DATE),DISEASE_NAME ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % (
-        ds, cal_year, cal_month)
+        ds, year_num, month_num)
     sql_week = '''SELECT YEAR(ACCIDENT_DATE) as year,DISEASE_NAME as name,count(ID_CARD) as count from `t_card_infection`
             where DISEASE_NAME in %s AND DISEASE_NAME IS NOT NULL
              AND ((ACCIDENT_DATE between '%s' and  '%s') or (ACCIDENT_DATE between '%s' and  '%s') or 
             (ACCIDENT_DATE between '%s' and  '%s') or (ACCIDENT_DATE between '%s' and  '%s') or 
             (ACCIDENT_DATE between '%s' and '%s') or (ACCIDENT_DATE between '%s' and '%s'))
             GROUP BY YEAR(ACCIDENT_DATE),DISEASE_NAME ORDER BY YEAR(ACCIDENT_DATE),DISEASE_NAME''' % (
-        ds, start_week_date[0],
-        end_week_date[0],
-        start_week_date[1],
-        end_week_date[1],
-        start_week_date[2],
-        end_week_date[2],
-        start_week_date[3],
-        end_week_date[3],
-        start_week_date[4],
-        end_week_date[4],
-        start_week_date[5],
-        end_week_date[5])
+        ds, start_week[0],
+        end_week[0],
+        start_week[1],
+        end_week[1],
+        start_week[2],
+        end_week[2],
+        start_week[3],
+        end_week[3],
+        start_week[4],
+        end_week[4],
+        start_week[5],
+        end_week[5])
 
     # 获取数据
     y_res = mc.getAll(sql_year)
@@ -71,5 +71,5 @@ ds = ('细菌性痢疾', '阿米巴性痢疾', '登革热', '丙肝', '戊肝', 
       '胎传梅毒', '隐性梅毒', '流行性感冒', '流行性腮腺炎', '风疹', '急性出血性结膜炎', '手足口病', '其它感染性腹泻病')
 mc_test = MysqlConn('mysql-test-warning')
 mc_formal = MysqlConn('mysql-formal-warning')
-five_data_test, three_data_test, dis_ls_test = getWarningData(mc_test, ds)
-five_data_formal, three_data_formal, dis_ls_formal = getWarningData(mc_formal, ds)
+five_data_test, three_data_test, dis_ls_test = getWarningData(mc_test, ds, cal_year, cal_month, start_week_date, end_week_date)
+five_data_formal, three_data_formal, dis_ls_formal = getWarningData(mc_formal, ds, cal_year, cal_month, start_week_date, end_week_date)

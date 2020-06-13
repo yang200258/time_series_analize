@@ -78,6 +78,23 @@ def save_warn_data(mc, data, type_cal, dise_ls):
     mc.insertMany(sql, ls)
 
 
+def save_warn_restore_data(mc, data, type_cal, dise_ls):
+    sql = '''REPLACE into 
+        t_infect_t_distribution_warning(title_cal, TYPE_YEAR_CODE, TYPE_TIME_CODE, DISEASE_NAME, DISEASE_CODE,
+        COUNT_CAL, UPDATE_TIME) 
+        values(%s, %s, %s, %s, %s, %s, str_to_date(%s,'%%Y-%%m-%%d %%H:%%i:%%s'))'''
+    ls = []
+    now = str(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+    type_time = {"year": 1, "month": 2, "week": 3}
+    type_title = {1: "%s年" % now_year, 2: "%s年%s月" % (now_year, cal_month), 3: "%s年第%s周" % (now_year, cal_week)}
+    for index, row in data:
+        item = list(data[index][row][-6:])
+        title_cal = type_title[type_time[index]]
+        t = title_cal, type_cal, type_time[index], row, dise_ls[row], int(item[0]), now
+        ls.append(t)
+    mc.insertMany(sql, ls)
+
+
 # TODO 需要优化从数据库拿出的列表数据，如何更高效转化为dataframe
 def trans_mysql_data(res_data, ds):
     data = pd.DataFrame(index=year_list, columns=ds)

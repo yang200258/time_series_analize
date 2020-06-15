@@ -4,7 +4,12 @@ from utils.timedata import cal_year, cal_month, start_week_date, end_week_date
 from utils.util import trans_mysql_data
 
 
+<<<<<<< HEAD
 def getWarningData(mc, dis_list, year_num, month_num,  start_week, end_week):
+=======
+def getWarningData(mc, dis_list):
+    mc_test = MysqlConn('mysql-test-warning')
+>>>>>>> origin/master
     sql_dise = '''SELECT DISEASES_NAME,DISEASE_CODE from dim_infect_disease'''
     # 获取所有疾病对应code及names
     dise_ls = dict(mc.getAll(sql_dise))
@@ -37,9 +42,9 @@ def getWarningData(mc, dis_list, year_num, month_num,  start_week, end_week):
         end_week[5])
 
     # 获取数据
-    y_res = mc.getAll(sql_year)
-    m_res = mc.getAll(sql_month)
-    w_res = mc.getAll(sql_week)
+    y_res = mc_test.getAll(sql_year)
+    m_res = mc_test.getAll(sql_month)
+    w_res = mc_test.getAll(sql_week)
 
     # 转化数据
     five_year_data = trans_mysql_data(y_res, dis_list)

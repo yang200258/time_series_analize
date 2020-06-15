@@ -71,7 +71,7 @@ class MysqlConn(BasePymysqlPool):
         if count > 0:
             result = self._cursor.fetchall()
         else:
-            result = False
+            result = {}
         # end = time.time()
         # print('获取数据共用时： %s' % (end - start))
         return result

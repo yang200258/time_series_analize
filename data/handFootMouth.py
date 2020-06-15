@@ -9,7 +9,7 @@ def getData(mc):
             where t.IFD_CODE = 4000 and t.ONSET_YEAR > 2013
             GROUP BY YEAR(t.ONSET_DATE), month(t.ONSET_DATE), day(t.ONSET_DATE)
             ORDER BY YEAR(t.ONSET_DATE), month(t.ONSET_DATE), day(t.ONSET_DATE)'''
-    res = mc_test.getAll(sql)
+    res = mc.getAll(sql)
 
     labels = pd.DataFrame(res, columns=['Datetime', 'Count'])
 
@@ -27,7 +27,7 @@ mc_test = MysqlConn('mysql-test-forecast')
 mc_formal = MysqlConn('mysql-formal-forecast')
 
 hfm_test_test, hfm_train_test = getData(mc_test)
-hfm_test_formal, hfm_train_formal = getData(mc_test)
+hfm_test_formal, hfm_train_formal = getData(mc_formal)
 
 mc_formal.dispose()
 mc_test.dispose()

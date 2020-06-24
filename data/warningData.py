@@ -1,15 +1,16 @@
 import pandas as pd
-from baseClass.baseMysql import MysqlConn
+from baseClass.baseMysqlPool import MysqlConn
 from utils.timedata import cal_year, cal_month, start_week_date, end_week_date
 from utils.util import trans_mysql_data
 
 
-<<<<<<< HEAD
-def getWarningData(mc, dis_list, year_num, month_num,  start_week, end_week):
-=======
-def getWarningData(mc, dis_list):
-    mc_test = MysqlConn('mysql-test-warning')
->>>>>>> origin/master
+mc_test = MysqlConn('mysql-test-warning')
+mc_formal = MysqlConn('mysql-formal-warning')
+ds = ('细菌性痢疾', '阿米巴性痢疾', '登革热', '丙肝', '戊肝', '乙肝', '百日咳', '淋病', 'Ⅰ期梅毒', 'Ⅱ期梅毒', 'III期梅毒',
+          '胎传梅毒', '隐性梅毒', '流行性感冒', '流行性腮腺炎', '风疹', '急性出血性结膜炎', '手足口病', '其它感染性腹泻病')
+
+
+def getWarningData(mc, dis_list, year_num, month_num, start_week, end_week):
     sql_dise = '''SELECT DISEASES_NAME,DISEASE_CODE from dim_infect_disease'''
     # 获取所有疾病对应code及names
     dise_ls = dict(mc.getAll(sql_dise))
@@ -42,9 +43,9 @@ def getWarningData(mc, dis_list):
         end_week[5])
 
     # 获取数据
-    y_res = mc_test.getAll(sql_year)
-    m_res = mc_test.getAll(sql_month)
-    w_res = mc_test.getAll(sql_week)
+    y_res = mc.getAll(sql_year)
+    m_res = mc.getAll(sql_month)
+    w_res = mc.getAll(sql_week)
 
     # 转化数据
     five_year_data = trans_mysql_data(y_res, dis_list)
@@ -68,13 +69,18 @@ def getWarningData(mc, dis_list):
     five_week_data.drop(columns=x, axis=1, inplace=True)
     # 合并5年的数据
     five_data = pd.concat([five_year_data, five_month_data, five_week_data], axis=1, keys=['year', 'month', 'week'])
+    if five_data.index[0] == cal_year - 1:
+        five_data.fillna(0, inplace=True)
+        five_data.loc[cal_year] = five_data.loc[five_data.index[0]] + five_data.loc[five_data.index[1]]
+        five_data.drop(index=cal_year - 1, axis=0, inplace=True)
     three_data = five_data.iloc[-4:].copy()
+
     return five_data, three_data, dise_ls
 
 
-ds = ('细菌性痢疾', '阿米巴性痢疾', '登革热', '丙肝', '戊肝', '乙肝', '百日咳', '淋病', 'Ⅰ期梅毒', 'Ⅱ期梅毒', 'III期梅毒',
-      '胎传梅毒', '隐性梅毒', '流行性感冒', '流行性腮腺炎', '风疹', '急性出血性结膜炎', '手足口病', '其它感染性腹泻病')
-mc_test = MysqlConn('mysql-test-warning')
-mc_formal = MysqlConn('mysql-formal-warning')
-five_data_test, three_data_test, dis_ls_test = getWarningData(mc_test, ds, cal_year, cal_month, start_week_date, end_week_date)
-five_data_formal, three_data_formal, dis_ls_formal = getWarningData(mc_formal, ds, cal_year, cal_month, start_week_date, end_week_date)
+# if __name__ == "__main__":
+five_data_formal, three_data_formal, dis_ls_formal = getWarningData(mc_formal, ds, cal_year, cal_month,
+                                                                    start_week_date, end_week_date)
+
+five_data_test, three_data_test, dis_ls_test = getWarningData(mc_test, ds, cal_year, cal_month, start_week_date,
+                                                                      end_week_date)

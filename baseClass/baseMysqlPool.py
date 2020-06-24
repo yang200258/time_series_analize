@@ -1,8 +1,8 @@
-import time
+import threading
 
 import pymysql
 from DBUtils.PooledDB import PooledDB
-from pymysql.cursors import DictCursor
+# from pymysql.cursors import DictCursor
 
 from .config import Config
 
@@ -11,6 +11,17 @@ class BasePymysqlPool(object):
     """
         父类连接池，用于初始化数据库连接
     """
+    _instance_lock = threading.Lock()
+
+    def __new__(cls, *args, **kwargs):
+        """
+        @summary 通过重写new方法使基类为单例模式
+        """
+        if not hasattr(MysqlConnPool, "_instance"):
+            with MysqlConnPool._instance_lock:
+                if not hasattr(MysqlConnPool, "_instance"):
+                    MysqlConnPool._instance = object.__new__(cls)
+        return MysqlConnPool._instance
 
     def __init__(self, host, port, user, password, db_name):
         self.host = host
@@ -22,38 +33,48 @@ class BasePymysqlPool(object):
         self.cursor = None
 
 
-class MysqlConn(BasePymysqlPool):
+class MysqlConnPool(BasePymysqlPool):
     """
         MYSQL数据库对象，负责产生数据库连接 , 此类中的连接采用连接池实现获取连接对象：conn = Mysql.getConn()
                 释放连接对象;conn.close()或del conn
     """
-    __pool = None
+
+    # __pool = None
+    # _instance_lock = threading.Lock()
+
+    # def __new__(cls, *args, **kwargs):
+    #     if not hasattr(MysqlConnPool, "_instance"):
+    #         with MysqlConnPool._instance_lock:
+    #             if not hasattr(MysqlConnPool, "_instance"):
+    #                 MysqlConnPool._instance = object.__new__(cls)
+    #     return MysqlConnPool._instance
 
     def __init__(self, conf_name=None):
+        """将配置文件中的配置项写入init函数"""
         self.conf = Config().get_content(conf_name)
-        super().__init__(**self.conf)
-        self._conn = self.__getConn()
+        if not hasattr(MysqlConnPool, "__pool"):
+            super().__init__(**self.conf)
+            self.__getConnPool()
+        self._conn = self.__pool.connection()
         self._cursor = self._conn.cursor()
 
-    def __getConn(self):
+    def __getConnPool(self):
         """
-           @summary: 静态方法，从连接池中取出连接
+           @summary: 静态方法，创建链接池
            @return MySQLdb.connection
         """
-        if MysqlConn.__pool is None:
-            maxconnections = 15
-            __pool = PooledDB(creator=pymysql,
-                              maxconnections=maxconnections,
-                              host=self.host,
-                              user=self.user,
-                              port=self.port,
-                              password=self.password,
-                              db=self.db_name,
-                              use_unicode=True,
-                              charset='utf8',
-                              # cursorclass=DictCursor
-                              )
-        return __pool.connection()
+        maxconnections = 15
+        MysqlConnPool.__pool = PooledDB(creator=pymysql,
+                                        maxconnections=maxconnections,
+                                        host=self.host,
+                                        user=self.user,
+                                        port=self.port,
+                                        password=self.password,
+                                        db=self.db_name,
+                                        use_unicode=True,
+                                        charset='utf8',
+                                        # cursorclass=DictCursor
+                                        )
 
     def getAll(self, sql, param=None):
         """
@@ -189,11 +210,5 @@ class MysqlConn(BasePymysqlPool):
             self.end('commit')
         else:
             self.end('rollback')
-        print("释放连接池资源 %s,%s" % (self.host, self.db_name))
-        self._cursor.close()
-        self._conn.close()
-
-    def __del__(self):
-        print("释放连接池资源 %s,%s" % (self.host, self.db_name))
         self._cursor.close()
         self._conn.close()

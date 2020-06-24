@@ -4,7 +4,7 @@ from importlib import reload
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 from apscheduler.schedulers.background import BlockingScheduler
 
-from baseClass.baseMysql import MysqlConn
+from baseClass.baseMysqlPool import MysqlConn
 from data import warningData
 from data.warningData import five_data_test, five_data_formal, three_data_test, three_data_formal, dis_ls_test, \
     dis_ls_formal

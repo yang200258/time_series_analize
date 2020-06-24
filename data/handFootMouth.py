@@ -1,4 +1,4 @@
-from baseClass.baseMysql import MysqlConn
+from baseClass.baseMysqlPool import MysqlConn
 import pandas as pd
 from utils.util import aggregating
 
